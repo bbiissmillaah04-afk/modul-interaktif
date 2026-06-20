@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seni Rupa untuk Siswa SMA Kelas XI</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0d1117 0%,#1a1040 40%,#0d2137 100%);min-height:100vh;color:#fff;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,#a855f7,#06b6d4);width:0%;transition:width 0.15s;}
+.sidebar{width:240px;height:100vh;background:linear-gradient(180deg,rgba(168,85,247,0.15) 0%,rgba(6,182,212,0.1) 100%);backdrop-filter:blur(20px);border-right:1px solid rgba(168,85,247,0.2);padding:4rem 1rem 1.5rem 1rem;position:fixed;left:0;top:0;z-index:100;transition:transform 0.3s;display:flex;flex-direction:column;overflow-y:auto;}
+.sidebar.hidden{transform:translateX(-100%);}
+.sidebar-logo{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo .title{color:#a855f7;font-size:1.05rem;font-weight:700;}
+.sidebar-logo .sub{color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:3px;}
+.nav-section{font-size:0.68rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin:1rem 0 0.4rem 0.5rem;}
+.sidebar a{display:flex;align-items:center;gap:0.6rem;color:rgba(255,255,255,0.6);text-decoration:none;padding:0.55rem 0.8rem;border-radius:10px;font-size:0.88rem;transition:all 0.2s;margin-bottom:2px;}
+.sidebar a:hover{background:rgba(168,85,247,0.15);color:#a855f7;}
+.sidebar a.active{background:linear-gradient(90deg,rgba(168,85,247,0.25),rgba(6,182,212,0.15));color:#a855f7;border-left:2px solid #a855f7;}
+.sidebar a.cyan-nav:hover{color:#06b6d4;background:rgba(6,182,212,0.15);}
+.sidebar a.cyan-nav.active{color:#06b6d4;border-left-color:#06b6d4;background:linear-gradient(90deg,rgba(6,182,212,0.2),rgba(168,85,247,0.1));}
+.hamburger{position:fixed;top:1rem;left:1rem;z-index:200;width:40px;height:40px;border-radius:10px;border:1px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.15);backdrop-filter:blur(10px);color:#a855f7;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.hamburger:hover{background:rgba(168,85,247,0.3);}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90;}
+.overlay.show{display:block;}
+.main{margin-left:240px;padding:2rem;transition:margin 0.3s;}
+.main.full{margin-left:0;padding:2rem 2rem 2rem 5rem;}
+.glass-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:1.8rem;margin-bottom:1.5rem;width:100%;}
+.glass-card.purple-border{border-color:rgba(168,85,247,0.25);}
+.glass-card.cyan-border{border-color:rgba(6,182,212,0.25);}
+.section-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.5rem;font-weight:600;}
+.purple-label{color:#a855f7;}.cyan-label{color:#06b6d4;}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:1rem;}
+.purple-title{color:#a855f7;}.cyan-title{color:#06b6d4;}
+.hero-desc{color:rgba(255,255,255,0.7);line-height:1.8;font-size:0.95rem;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem;}
+.info-box{padding:1rem;border-radius:12px;font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.75);}
+.info-box.purple{background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);}
+.info-box.cyan{background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);}
+.info-box h4{margin-bottom:0.4rem;font-size:0.88rem;}
+.info-box.purple h4{color:#a855f7;}.info-box.cyan h4{color:#06b6d4;}
+.sub-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.2rem;margin-bottom:1rem;}
+.sub-card h3{font-size:0.95rem;margin-bottom:0.6rem;color:#06b6d4;}
+.sub-content p{color:rgba(255,255,255,0.7);font-size:0.88rem;line-height:1.75;margin-bottom:0.8rem;}
+canvas{width:100%;border-radius:12px;display:block;background:rgba(0,0,0,0.2);}
+.timer{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);color:#06b6d4;padding:0.35rem 1rem;border-radius:50px;font-size:0.85rem;margin-bottom:1.2rem;}
+.quiz-nav{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.q-dot{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.q-dot.done{background:rgba(168,85,247,0.3);border-color:#a855f7;color:#a855f7;}
+.q-dot.current{background:rgba(6,182,212,0.3);border-color:#06b6d4;color:#06b6d4;}
+.opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 1rem;margin-bottom:0.5rem;cursor:pointer;color:rgba(255,255,255,0.8);font-size:0.88rem;transition:all 0.2s;}
+.opt:hover{background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4);}
+.opt.correct{background:rgba(34,197,94,0.15);border-color:#22c55e;color:#86efac;pointer-events:none;}
+.opt.wrong{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#fca5a5;pointer-events:none;}
+.opt.disabled{pointer-events:none;opacity:0.5;}
+.feedback{padding:0.6rem 1rem;border-radius:8px;font-size:0.83rem;margin-top:0.5rem;display:none;}
+.feedback.ok{background:rgba(34,197,94,0.1);color:#86efac;border:1px solid rgba(34,197,94,0.2);}
+.feedback.no{background:rgba(239,68,68,0.1);color:#fca5a5;border:1px solid rgba(239,68,68,0.2);}
+.quiz-q{color:#fff;font-size:0.92rem;font-weight:500;margin-bottom:0.8rem;}
+.result-box{text-align:center;padding:1.5rem;}
+.result-score{font-size:3rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.result-grade{font-size:1.2rem;color:rgba(255,255,255,0.7);margin-top:0.3rem;}
+.glos-item{padding:0.8rem 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.glos-item:last-child{border-bottom:none;}
+.glos-term{color:#a855f7;font-weight:600;font-size:0.9rem;}
+.glos-def{color:rgba(255,255,255,0.65);font-size:0.85rem;margin-top:0.2rem;line-height:1.6;}
+#back-top{position:fixed;bottom:1.5rem;right:1.5rem;width:40px;height:40px;border-radius:50%;border:1px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.15);backdrop-filter:blur(10px);color:#a855f7;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+#back-top:hover{background:rgba(168,85,247,0.3);}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="title">📚 Seni Rupa untuk Siswa SMA Kelas XI</div>
+    <div class="sub">XI · Seni Rupa</div>
+  </div>
+  <div class="nav-section">Navigasi</div>
+  <a href="#beranda">🏠 Beranda</a>
+  <a href="#materi">📖 Materi</a>
+  <a href="#animasi" class="cyan-nav">✨ Animasi</a>
+  <a href="#quiz" class="cyan-nav">❓ Quiz</a>
+  <a href="#glosarium">📝 Glosarium</a>
+</nav>
+<div class="main" id="main">
+  <section id="beranda" class="glass-card purple-border">
+    <div class="section-label purple-label">Modul Interaktif</div>
+    <div class="section-title purple-title">Seni Rupa untuk Siswa SMA Kelas XI</div>
+    <p class="hero-desc">Pada akhir modul ini, siswa diharapkan dapat memahami konsep dasar seni rupa, mengenal berbagai teknik dan media seni rupa, menerapkan prinsip-prinsip seni rupa dalam karya seni, serta mengembangkan kreativitas dan apresiasi terhadap seni rupa. Siswa juga diharapkan dapat menganalisis dan mengevaluasi karya seni rupa, serta mengembangkan kemampuan mengkritik dan memberikan saran yang konstruktif. Dengan demikian, siswa dapat memperoleh pengetahuan dan keterampilan yang cukup untuk mengembangkan diri dalam bidang seni rupa. Siswa juga diharapkan dapat memahami sejarah dan perkembangan seni rupa, serta mengenal tokoh-tokoh seni rupa yang terkenal. Siswa juga diharapkan dapat mengembangkan kemampuan menggabungkan seni rupa dengan disiplin ilmu lain, seperti desain, arsitektur, dan teknologi.</p>
+    <div class="info-grid">
+      <div class="info-box purple"><h4>🎯 Tujuan Pembelajaran</h4>Pada akhir modul ini, siswa diharapkan dapat memahami konsep dasar seni rupa, mengenal berbagai teknik dan media seni rupa, menerapkan prinsip-prinsip seni rupa dalam karya seni, serta mengembangkan kreativitas dan apresiasi terhadap seni rupa. Siswa juga diharapkan dapat menganalisis dan mengevaluasi karya seni rupa, serta mengembangkan kemampuan mengkritik dan memberikan saran yang konstruktif. Dengan demikian, siswa dapat memperoleh pengetahuan dan keterampilan yang cukup untuk mengembangkan diri dalam bidang seni rupa. Siswa juga diharapkan dapat memahami sejarah dan perkembangan seni rupa, serta mengenal tokoh-tokoh seni rupa yang terkenal. Siswa juga diharapkan dapat mengembangkan kemampuan menggabungkan seni rupa dengan disiplin ilmu lain, seperti desain, arsitektur, dan teknologi.</div>
+      <div class="info-box cyan"><h4>📋 Kompetensi Dasar</h4>Kompetensi Dasar 3.1: Menganalisis konsep dasar seni rupa, Kompetensi Dasar 3.2: Mengenal berbagai teknik dan media seni rupa, Kompetensi Dasar 3.3: Menerapkan prinsip-prinsip seni rupa dalam karya seni, Kompetensi Dasar 3.4: Mengembangkan kreativitas dan apresiasi terhadap seni rupa. Kompetensi Dasar 4.1: Mengevaluasi karya seni rupa, Kompetensi Dasar 4.2: Mengkritik dan memberikan saran yang konstruktif, Kompetensi Dasar 4.3: Mengembangkan kemampuan menggabungkan seni rupa dengan disiplin ilmu lain.</div>
+    </div>
+  </section>
+  <section id="materi" class="glass-card purple-border">
+    <div class="section-label purple-label">Belajar</div>
+    <div class="section-title purple-title">Materi</div>
+    
+  <div class="sub-card">
+    <h3>Pengenalan Seni Rupa</h3>
+    <div class="sub-content"><p>Seni rupa adalah salah satu bentuk seni yang menggunakan media visual untuk mengungkapkan gagasan, perasaan, dan pengalaman. Seni rupa dapat dibagi menjadi beberapa jenis, seperti lukisan, patung, grafis, dan instalasi. Setiap jenis seni rupa memiliki teknik dan media yang berbeda-beda. Lukisan, misalnya, menggunakan cat dan kanvas sebagai media, sedangkan patung menggunakan bahan seperti tanah liat, kayu, atau logam. Grafis, di sisi lain, menggunakan teknik cetak untuk menghasilkan karya seni. Instalasi, yang merupakan jenis seni rupa yang relatif baru, menggunakan berbagai bahan dan objek untuk menghasilkan karya seni yang interaktif. Seni rupa juga dapat dibagi menjadi beberapa aliran, seperti realism, abstrak, dan ekspresionisme. Realisme, misalnya, berfokus pada penggambaran realitas secara akurat, sedangkan abstrak berfokus pada penggunaan bentuk dan warna untuk menghasilkan karya seni yang non-representasional. Ekspresionisme, di sisi lain, berfokus pada pengungkapan perasaan dan emosi melalui karya seni. Dalam mempelajari seni rupa, siswa perlu memahami konsep dasar seni rupa, seperti garis, bentuk, warna, dan tekstur. Siswa juga perlu memahami prinsip-prinsip seni rupa, seperti keseimbangan, kontras, dan harmoni. Dengan memahami konsep dan prinsip dasar seni rupa, siswa dapat mengembangkan kreativitas dan apresiasi terhadap seni rupa. Siswa juga perlu memahami sejarah dan perkembangan seni rupa, serta mengenal tokoh-tokoh seni rupa yang terkenal. Dengan demikian, siswa dapat memperoleh pengetahuan dan keterampilan yang cukup untuk mengembangkan diri dalam bidang seni rupa.</p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Teknik dan Media Seni Rupa</h3>
+    <div class="sub-content"><p>Teknik dan media seni rupa sangat beragam dan dapat dibagi menjadi beberapa jenis. Lukisan, misalnya, menggunakan cat dan kanvas sebagai media, sedangkan patung menggunakan bahan seperti tanah liat, kayu, atau logam. Grafis, di sisi lain, menggunakan teknik cetak untuk menghasilkan karya seni. Instalasi, yang merupakan jenis seni rupa yang relatif baru, menggunakan berbagai bahan dan objek untuk menghasilkan karya seni yang interaktif. Dalam mempelajari teknik dan media seni rupa, siswa perlu memahami cara menggunakan alat dan bahan yang tepat untuk menghasilkan karya seni yang diinginkan. Siswa juga perlu memahami cara menggabungkan teknik dan media yang berbeda-beda untuk menghasilkan karya seni yang unik dan menarik. Selain itu, siswa juga perlu memahami cara mengkritik dan mengevaluasi karya seni rupa, serta mengembangkan kemampuan menggabungkan seni rupa dengan disiplin ilmu lain, seperti desain, arsitektur, dan teknologi.</p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Prinsip-Prinsip Seni Rupa</h3>
+    <div class="sub-content"><p>Prinsip-prinsip seni rupa sangat penting dalam menghasilkan karya seni yang baik. Prinsip-prinsip tersebut antara lain keseimbangan, kontras, dan harmoni. Keseimbangan, misalnya, berfokus pada penggunaan elemen-elemen visual untuk menghasilkan karya seni yang seimbang dan stabil. Kontras, di sisi lain, berfokus pada penggunaan elemen-elemen visual yang berbeda-beda untuk menghasilkan karya seni yang menarik dan dinamis. Harmoni, yang merupakan prinsip yang sangat penting dalam seni rupa, berfokus pada penggunaan elemen-elemen visual yang harmonis dan selaras untuk menghasilkan karya seni yang indah dan menarik. Dalam mempelajari prinsip-prinsip seni rupa, siswa perlu memahami cara menerapkan prinsip-prinsip tersebut dalam karya seni. Siswa juga perlu memahami cara menggabungkan prinsip-prinsip yang berbeda-beda untuk menghasilkan karya seni yang unik dan menarik.</p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Sejarah dan Perkembangan Seni Rupa</h3>
+    <div class="sub-content"><p>Sejarah dan perkembangan seni rupa sangat panjang dan kompleks. Seni rupa telah ada sejak zaman prasejarah, dengan contoh-contoh karya seni yang masih dapat ditemukan hingga saat ini. Dalam sejarah seni rupa, terdapat banyak aliran dan gerakan yang berbeda-beda, seperti realism, abstrak, dan ekspresionisme. Realisme, misalnya, berfokus pada penggambaran realitas secara akurat, sedangkan abstrak berfokus pada penggunaan bentuk dan warna untuk menghasilkan karya seni yang non-representasional. Ekspresionisme, di sisi lain, berfokus pada pengungkapan perasaan dan emosi melalui karya seni. Dalam mempelajari sejarah dan perkembangan seni rupa, siswa perlu memahami cara mengkritik dan mengevaluasi karya seni rupa, serta mengembangkan kemampuan menggabungkan seni rupa dengan disiplin ilmu lain, seperti desain, arsitektur, dan teknologi.</p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Tokoh-Tokoh Seni Rupa</h3>
+    <div class="sub-content"><p>Tokoh-tokoh seni rupa sangat beragam dan memiliki gaya dan aliran yang berbeda-beda. Beberapa contoh tokoh seni rupa yang terkenal antara lain Leonardo da Vinci, Vincent van Gogh, dan Pablo Picasso. Leonardo da Vinci, misalnya, dikenal sebagai pelukis dan seniman yang sangat berpengaruh dalam sejarah seni rupa. Vincent van Gogh, di sisi lain, dikenal sebagai pelukis yang sangat ekspresif dan emosional. Pablo Picasso, yang merupakan salah satu tokoh seni rupa yang paling berpengaruh dalam abad ke-20, dikenal sebagai pelukis dan seniman yang sangat inovatif dan kreatif. Dalam mempelajari tokoh-tokoh seni rupa, siswa perlu memahami cara mengkritik dan mengevaluasi karya seni rupa, serta mengembangkan kemampuan menggabungkan seni rupa dengan disiplin ilmu lain, seperti desain, arsitektur, dan teknologi.</p></div>
+  </div>
+
+  </section>
+  <section id="animasi" class="glass-card cyan-border">
+    <div class="section-label cyan-label">Visual</div>
+    <div class="section-title cyan-title">Animasi Interaktif</div>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.83rem;margin-bottom:1rem">Animasi dalam seni rupa dapat digunakan untuk menghasilkan karya seni yang dinamis dan interaktif. Dalam mempelajari animasi, siswa perlu memahami cara menggunakan software dan teknologi yang tepat untuk menghasilkan animasi yang berkualitas. Siswa juga perlu memahami cara menggabungkan animasi dengan disiplin ilmu lain, seperti desain, arsitektur, dan teknologi.</p>
+    <canvas id="c" height="200"></canvas>
+  </section>
+  <section id="quiz" class="glass-card cyan-border">
+    <div class="section-label cyan-label">Evaluasi</div>
+    <div class="section-title cyan-title">Quiz Interaktif</div>
+    <div class="timer">⏱ <span id="td">10:00</span></div>
+    <div class="quiz-nav" id="qnav"></div>
+    <div id="qbox"></div>
+    <div id="result-box" style="display:none" class="result-box">
+      <div class="result-score" id="rscore"></div>
+      <div class="result-grade" id="rgrade"></div>
+    </div>
+  </section>
+  <section id="glosarium" class="glass-card purple-border">
+    <div class="section-label purple-label">Referensi</div>
+    <div class="section-title purple-title">Glosarium</div>
+    
+  <div class="glos-item">
+    <div class="glos-term">Seni Rupa</div>
+    <div class="glos-def">Salah satu bentuk seni yang menggunakan media visual untuk mengungkapkan gagasan, perasaan, dan pengalaman</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Prinsip Keseimbangan</div>
+    <div class="glos-def">Penggunaan elemen-elemen visual yang seimbang dan stabil untuk menghasilkan karya seni yang seimbang dan stabil</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Aliran Seni Rupa Abstrak</div>
+    <div class="glos-def">Aliran seni rupa yang berfokus pada penggunaan bentuk dan warna untuk menghasilkan karya seni yang non-representasional</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Instalasi</div>
+    <div class="glos-def">Karya seni yang menggunakan berbagai bahan dan objek untuk menghasilkan karya seni yang interaktif</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Lukisan</div>
+    <div class="glos-def">Karya seni yang menggunakan cat dan kanvas sebagai media</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Patung</div>
+    <div class="glos-def">Karya seni yang menggunakan bahan seperti tanah liat, kayu, atau logam sebagai media</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Grafis</div>
+    <div class="glos-def">Karya seni yang menggunakan teknik cetak untuk menghasilkan karya seni</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Animasi</div>
+    <div class="glos-def">Karya seni yang menggunakan teknik gerakan untuk menghasilkan karya seni yang dinamis dan interaktif</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Desain</div>
+    <div class="glos-def">Proses pembuatan karya seni yang menggunakan prinsip-prinsip seni rupa untuk menghasilkan karya seni yang fungsional dan estetis</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Arsitektur</div>
+    <div class="glos-def">Proses pembuatan bangunan yang menggunakan prinsip-prinsip seni rupa untuk menghasilkan bangunan yang fungsional dan estetis</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Teknologi</div>
+    <div class="glos-def">Penggunaan alat dan bahan untuk menghasilkan karya seni yang menggunakan prinsip-prinsip seni rupa</div>
+  </div>
+
+  </section>
+</div>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+let sidebarOpen=true;
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const mn=document.getElementById('main');
+  const ov=document.getElementById('overlay');
+  sidebarOpen=!sidebarOpen;
+  if(sidebarOpen){sb.classList.remove('hidden');mn.classList.remove('full');ov.classList.remove('show');}
+  else{sb.classList.add('hidden');mn.classList.add('full');ov.classList.add('show');}
+}
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  document.getElementById('progress-bar').style.width=p+'%';
+  document.querySelectorAll('.sidebar a').forEach(a=>{
+    const s=document.querySelector(a.getAttribute('href'));
+    if(s){const r=s.getBoundingClientRect();if(r.top<=120&&r.bottom>=120){a.classList.add('active');}else{a.classList.remove('active');}}
+  });
+});
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+canvas.width=canvas.offsetWidth||800;canvas.height=200;
+const ptypes=[{l:'CO₂',c:'#a855f7'},{l:'H₂O',c:'#06b6d4'},{l:'O₂',c:'#22c55e'},{l:'ATP',c:'#f59e0b'}];
+const pts=[];
+for(let i=0;i<30;i++){const t=ptypes[Math.floor(Math.random()*4)];pts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:5+Math.random()*6,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5,c:t.c,l:t.l});}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<p.r||p.x>canvas.width-p.r)p.vx*=-1;if(p.y<p.r||p.y>canvas.height-p.r)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+'33';ctx.fill();ctx.strokeStyle=p.c;ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#fff';ctx.font='8px sans-serif';ctx.textAlign='center';ctx.fillText(p.l,p.x,p.y+3);});requestAnimationFrame(draw);}
+draw();
+const qs=[{"soal":"Apa yang dimaksud dengan seni rupa?","opsi":["Seni yang menggunakan media visual untuk mengungkapkan gagasan, perasaan, dan pengalaman","Seni yang menggunakan media musik untuk mengungkapkan gagasan, perasaan, dan pengalaman","Seni yang menggunakan media sastra untuk mengungkapkan gagasan, perasaan, dan pengalaman","Seni yang menggunakan media tari untuk mengungkapkan gagasan, perasaan, dan pengalaman"],"jawaban":0,"feedback":["Benar, seni rupa adalah salah satu bentuk seni yang menggunakan media visual untuk mengungkapkan gagasan, perasaan, dan pengalaman","Salah, seni musik bukanlah seni rupa","Salah, seni sastra bukanlah seni rupa","Salah, seni tari bukanlah seni rupa"]},{"soal":"Apa yang dimaksud dengan prinsip keseimbangan dalam seni rupa?","opsi":["Penggunaan elemen-elemen visual yang berbeda-beda untuk menghasilkan karya seni yang menarik dan dinamis","Penggunaan elemen-elemen visual yang harmonis dan selaras untuk menghasilkan karya seni yang indah dan menarik","Penggunaan elemen-elemen visual yang seimbang dan stabil untuk menghasilkan karya seni yang seimbang dan stabil","Penggunaan elemen-elemen visual yang kontras untuk menghasilkan karya seni yang menarik dan dinamis"],"jawaban":2,"feedback":["Salah, prinsip kontras bukanlah prinsip keseimbangan","Salah, prinsip harmoni bukanlah prinsip keseimbangan","Benar, prinsip keseimbangan berfokus pada penggunaan elemen-elemen visual yang seimbang dan stabil untuk menghasilkan karya seni yang seimbang dan stabil","Salah, prinsip kontras bukanlah prinsip keseimbangan"]},{"soal":"Siapa yang dikenal sebagai pelukis dan seniman yang sangat berpengaruh dalam sejarah seni rupa?","opsi":["Leonardo da Vinci","Vincent van Gogh","Pablo Picasso","Michelangelo"],"jawaban":0,"feedback":["Benar, Leonardo da Vinci dikenal sebagai pelukis dan seniman yang sangat berpengaruh dalam sejarah seni rupa","Salah, Vincent van Gogh bukanlah pelukis dan seniman yang paling berpengaruh","Salah, Pablo Picasso bukanlah pelukis dan seniman yang paling berpengaruh","Salah, Michelangelo bukanlah pelukis dan seniman yang paling berpengaruh"]},{"soal":"Apa yang dimaksud dengan aliran seni rupa abstrak?","opsi":["Aliran seni rupa yang berfokus pada penggambaran realitas secara akurat","Aliran seni rupa yang berfokus pada penggunaan bentuk dan warna untuk menghasilkan karya seni yang non-representasional","Aliran seni rupa yang berfokus pada pengungkapan perasaan dan emosi melalui karya seni","Aliran seni rupa yang berfokus pada penggunaan elemen-elemen visual yang harmonis dan selaras untuk menghasilkan karya seni yang indah dan menarik"],"jawaban":1,"feedback":["Salah, aliran seni rupa realism bukanlah aliran seni rupa abstrak","Benar, aliran seni rupa abstrak berfokus pada penggunaan bentuk dan warna untuk menghasilkan karya seni yang non-representasional","Salah, aliran seni rupa ekspresionisme bukanlah aliran seni rupa abstrak","Salah, aliran seni rupa harmoni bukanlah aliran seni rupa abstrak"]},{"soal":"Apa yang dimaksud dengan instalasi dalam seni rupa?","opsi":["Karya seni yang menggunakan berbagai bahan dan objek untuk menghasilkan karya seni yang interaktif","Karya seni yang menggunakan cat dan kanvas sebagai media","Karya seni yang menggunakan bahan seperti tanah liat, kayu, atau logam sebagai media","Karya seni yang menggunakan teknik cetak untuk menghasilkan karya seni"],"jawaban":0,"feedback":["Benar, instalasi adalah karya seni yang menggunakan berbagai bahan dan objek untuk menghasilkan karya seni yang interaktif","Salah, lukisan bukanlah instalasi","Salah, patung bukanlah instalasi","Salah, grafis bukanlah instalasi"]}];
+let cur=0,score=0,done=[];
+const qnav=document.getElementById('qnav');
+const qbox=document.getElementById('qbox');
+function renderNav(){qnav.innerHTML='';qs.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(done.includes(i)?' done':i===cur?' current':'');d.textContent=i+1;qnav.appendChild(d);});}
+function renderQ(){
+  if(done.length===qs.length){qbox.style.display='none';const rb=document.getElementById('result-box');rb.style.display='block';const pct=score/qs.length;const grade=pct>=0.9?'A':pct>=0.8?'B':pct>=0.6?'C':'D';document.getElementById('rscore').textContent=score+'/'+qs.length;document.getElementById('rgrade').textContent='Nilai: '+grade+' — '+(pct>=0.8?'Luar biasa! 🎉':pct>=0.6?'Bagus, terus belajar! 👍':'Pelajari lagi materinya ya! 📖');return;}
+  while(done.includes(cur))cur=(cur+1)%qs.length;
+  renderNav();
+  const q=qs[cur];
+  qbox.innerHTML='<div class="quiz-q">'+q.soal+'</div>'+q.opsi.map((o,i)=>'<div class="opt" onclick="pick(this,'+i+')">'+String.fromCharCode(65+i)+'. '+o+'</div>').join('')+'<div class="feedback" id="fb"></div>';
+}
+window.pick=function(el,i){const q=qs[cur];qbox.querySelectorAll('.opt').forEach(o=>o.classList.add('disabled'));const fb=document.getElementById('fb');if(i===q.jawaban){el.classList.add('correct');fb.className='feedback ok';score++;}else{el.classList.add('wrong');qbox.querySelectorAll('.opt')[q.jawaban].classList.add('correct');fb.className='feedback no';}fb.textContent=q.feedback[i];fb.style.display='block';done.push(cur);setTimeout(()=>{cur=(cur+1)%qs.length;renderQ();renderNav();},1800);};
+renderNav();renderQ();
+let t=600;const td=document.getElementById('td');const ti=setInterval(()=>{t--;const m=Math.floor(t/60),s=t%60;td.textContent=m+':'+(s<10?'0':'')+s;if(t<=0)clearInterval(ti);},1000);
+</script>
+</body>
+</html>
