@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pemrograman Visual</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0d1117 0%,#1a1040 40%,#0d2137 100%);min-height:100vh;color:#fff;text-align:center;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,#a855f7,#06b6d4);width:0%;transition:width 0.15s;}
+.sidebar{width:240px;height:100vh;background:linear-gradient(180deg,rgba(168,85,247,0.15) 0%,rgba(6,182,212,0.1) 100%);backdrop-filter:blur(20px);border-right:1px solid rgba(168,85,247,0.2);padding:4rem 1rem 1.5rem 1rem;position:fixed;left:0;top:0;z-index:100;transition:transform 0.3s;display:flex;flex-direction:column;overflow-y:auto;text-align:left;}
+.sidebar.hidden{transform:translateX(-100%);}
+.sidebar-logo{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
+.sidebar-logo .title{color:#a855f7;font-size:1.05rem;font-weight:700;}
+.sidebar-logo .sub{color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:3px;}
+.nav-section{font-size:0.68rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px;margin:1rem 0 0.4rem 0.5rem;text-align:left;}
+.sidebar a{display:flex;align-items:center;gap:0.6rem;color:rgba(255,255,255,0.6);text-decoration:none;padding:0.55rem 0.8rem;border-radius:10px;font-size:0.88rem;transition:all 0.2s;margin-bottom:2px;text-align:left;}
+.sidebar a:hover{background:rgba(168,85,247,0.15);color:#a855f7;}
+.sidebar a.active{background:linear-gradient(90deg,rgba(168,85,247,0.25),rgba(6,182,212,0.15));color:#a855f7;border-left:2px solid #a855f7;}
+.sidebar a.cyan-nav:hover{color:#06b6d4;background:rgba(6,182,212,0.15);}
+.sidebar a.cyan-nav.active{color:#06b6d4;border-left-color:#06b6d4;background:linear-gradient(90deg,rgba(6,182,212,0.2),rgba(168,85,247,0.1));}
+.hamburger{position:fixed;top:1rem;left:1rem;z-index:200;width:40px;height:40px;border-radius:10px;border:1px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.15);backdrop-filter:blur(10px);color:#a855f7;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.hamburger:hover{background:rgba(168,85,247,0.3);}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90;}
+.overlay.show{display:block;}
+.main{margin-left:240px;padding:2rem;transition:margin 0.3s;text-align:center;}
+.main.full{margin-left:0;padding:2rem 2rem 2rem 5rem;}
+.glass-card{background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:1.8rem;margin-bottom:1.5rem;width:100%;text-align:center;}
+.glass-card.purple-border{border-color:rgba(168,85,247,0.25);}
+.glass-card.cyan-border{border-color:rgba(6,182,212,0.25);}
+.section-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.5rem;font-weight:600;text-align:center;}
+.purple-label{color:#a855f7;}.cyan-label{color:#06b6d4;}
+.section-title{font-size:1.4rem;font-weight:700;margin-bottom:1rem;text-align:center;}
+.purple-title{color:#a855f7;}.cyan-title{color:#06b6d4;}
+.hero-desc{color:rgba(255,255,255,0.7);line-height:1.8;font-size:0.95rem;text-align:center;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem;text-align:center;}
+.info-box{padding:1rem;border-radius:12px;font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.75);text-align:center;}
+.info-box.purple{background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.2);}
+.info-box.cyan{background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);}
+.info-box h4{margin-bottom:0.4rem;font-size:0.88rem;text-align:center;}
+.info-box.purple h4{color:#a855f7;}.info-box.cyan h4{color:#06b6d4;}
+.sub-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.2rem;margin-bottom:1rem;text-align:center;}
+.sub-card h3{font-size:0.95rem;margin-bottom:0.6rem;color:#06b6d4;text-align:center;}
+.sub-content p{color:rgba(255,255,255,0.7);font-size:0.88rem;line-height:1.75;margin-bottom:0.8rem;text-align:center;}
+canvas{width:100%;border-radius:12px;display:block;background:rgba(0,0,0,0.2);margin:0 auto;}
+.timer{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);color:#06b6d4;padding:0.35rem 1rem;border-radius:50px;font-size:0.85rem;margin:0 auto 1.2rem auto;}
+.quiz-nav{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.2rem;justify-content:center;}
+.q-dot{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.q-dot.done{background:rgba(168,85,247,0.3);border-color:#a855f7;color:#a855f7;}
+.q-dot.current{background:rgba(6,182,212,0.3);border-color:#06b6d4;color:#06b6d4;}
+.opt{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 1rem;margin-bottom:0.5rem;cursor:pointer;color:rgba(255,255,255,0.8);font-size:0.88rem;transition:all 0.2s;text-align:center;width:100%;}
+.opt:hover{background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.4);}
+.opt.correct{background:rgba(34,197,94,0.15);border-color:#22c55e;color:#86efac;pointer-events:none;}
+.opt.wrong{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#fca5a5;pointer-events:none;}
+.opt.disabled{pointer-events:none;opacity:0.5;}
+.feedback{padding:0.6rem 1rem;border-radius:8px;font-size:0.83rem;margin-top:0.5rem;display:none;text-align:center;}
+.feedback.ok{background:rgba(34,197,94,0.1);color:#86efac;border:1px solid rgba(34,197,94,0.2);}
+.feedback.no{background:rgba(239,68,68,0.1);color:#fca5a5;border:1px solid rgba(239,68,68,0.2);}
+.quiz-q{color:#fff;font-size:0.92rem;font-weight:500;margin-bottom:0.8rem;text-align:center;}
+.result-box{text-align:center;padding:1.5rem;}
+.result-score{font-size:3rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.result-grade{font-size:1.2rem;color:rgba(255,255,255,0.7);margin-top:0.3rem;}
+.glos-item{padding:0.8rem 0;border-bottom:1px solid rgba(255,255,255,0.06);text-align:center;}
+.glos-item:last-child{border-bottom:none;}
+.glos-term{color:#a855f7;font-weight:600;font-size:0.9rem;text-align:center;}
+.glos-def{color:rgba(255,255,255,0.65);font-size:0.85rem;margin-top:0.2rem;line-height:1.6;text-align:center;}
+#back-top{position:fixed;bottom:1.5rem;right:1.5rem;width:40px;height:40px;border-radius:50%;border:1px solid rgba(168,85,247,0.4);background:rgba(168,85,247,0.15);backdrop-filter:blur(10px);color:#a855f7;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+#back-top:hover{background:rgba(168,85,247,0.3);}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="title">📚 Pemrograman Visual</div>
+    <div class="sub">XI · Informatika</div>
+  </div>
+  <div class="nav-section">Navigasi</div>
+  <a href="#beranda">🏠 Beranda</a>
+  <a href="#materi">📖 Materi</a>
+  <a href="#animasi" class="cyan-nav">✨ Animasi</a>
+  <a href="#quiz" class="cyan-nav">❓ Quiz</a>
+  <a href="#glosarium">📝 Glosarium</a>
+</nav>
+<div class="main" id="main">
+  <section id="beranda" class="glass-card purple-border">
+    <div class="section-label purple-label">Modul Interaktif</div>
+    <div class="section-title purple-title">Pemrograman Visual</div>
+    <p class="hero-desc">Pada akhir modul ini, siswa diharapkan dapat memahami konsep dasar pemrograman visual, mengidentifikasi jenis-jenis bahasa pemrograman visual, serta mampu membuat program sederhana menggunakan bahasa pemrograman visual. Siswa juga diharapkan dapat menganalisis kelebihan dan kekurangan bahasa pemrograman visual, serta memahami penerapan pemrograman visual dalam berbagai bidang. Selain itu, siswa juga diharapkan dapat mempraktekan pemrograman visual dengan menggunakan tools dan software yang tepat, serta mampu membuat dokumen yang rapi dan sistematis tentang program yang dibuat. Siswa juga diharapkan dapat bekerja sama dalam tim untuk membuat program yang lebih kompleks dan mempresentasikan hasilnya dengan baik. Dengan demikian, siswa diharapkan dapat memiliki kemampuan pemrograman visual yang baik dan mampu mengaplikasikannya dalam berbagai bidang</p>
+    <div class="info-grid">
+      <div class="info-box purple"><h4>🎯 Tujuan Pembelajaran</h4>Pada akhir modul ini, siswa diharapkan dapat memahami konsep dasar pemrograman visual, mengidentifikasi jenis-jenis bahasa pemrograman visual, serta mampu membuat program sederhana menggunakan bahasa pemrograman visual. Siswa juga diharapkan dapat menganalisis kelebihan dan kekurangan bahasa pemrograman visual, serta memahami penerapan pemrograman visual dalam berbagai bidang. Selain itu, siswa juga diharapkan dapat mempraktekan pemrograman visual dengan menggunakan tools dan software yang tepat, serta mampu membuat dokumen yang rapi dan sistematis tentang program yang dibuat. Siswa juga diharapkan dapat bekerja sama dalam tim untuk membuat program yang lebih kompleks dan mempresentasikan hasilnya dengan baik. Dengan demikian, siswa diharapkan dapat memiliki kemampuan pemrograman visual yang baik dan mampu mengaplikasikannya dalam berbagai bidang</div>
+      <div class="info-box cyan"><h4>📋 Kompetensi Dasar</h4>3.6 Menganalisis bahasa pemrograman visual, 4.6 Membuat program sederhana menggunakan bahasa pemrograman visual, 3.7 Menganalisis kelebihan dan kekurangan bahasa pemrograman visual, 4.7 Membuat dokumen yang rapi dan sistematis tentang program yang dibuat. Pada kompetensi dasar ini, siswa diharapkan dapat memahami konsep dasar pemrograman visual, mengidentifikasi jenis-jenis bahasa pemrograman visual, serta mampu membuat program sederhana menggunakan bahasa pemrograman visual. Siswa juga diharapkan dapat menganalisis kelebihan dan kekurangan bahasa pemrograman visual, serta memahami penerapan pemrograman visual dalam berbagai bidang. Selain itu, siswa juga diharapkan dapat mempraktekan pemrograman visual dengan menggunakan tools dan software yang tepat, serta mampu membuat dokumen yang rapi dan sistematis tentang program yang dibuat</div>
+    </div>
+  </section>
+  <section id="materi" class="glass-card purple-border">
+    <div class="section-label purple-label">Belajar</div>
+    <div class="section-title purple-title">Materi</div>
+    
+  <div class="sub-card">
+    <h3>Pengenalan Pemrograman Visual</h3>
+    <div class="sub-content"><p>Pemrograman visual adalah teknik pemrograman yang menggunakan elemen-elemen visual seperti gambar, ikon, dan bentuk untuk membuat program. Pemrograman visual memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, karena tidak perlu menulis kode program yang panjang dan kompleks. Pemrograman visual juga memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik, karena dapat menggunakan elemen-elemen visual untuk membuat antarmuka pengguna yang lebih baik. Pemrograman visual dapat digunakan untuk membuat berbagai jenis program, seperti game, aplikasi mobile, dan aplikasi web. Pemrograman visual juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen. Pemrograman visual memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik. Pemrograman visual dapat dibagi menjadi beberapa jenis, seperti pemrograman visual berbasis blok, pemrograman visual berbasis ikon, dan pemrograman visual berbasis kode. Pemrograman visual berbasis blok menggunakan elemen-elemen visual seperti blok untuk membuat program, sedangkan pemrograman visual berbasis ikon menggunakan elemen-elemen visual seperti ikon untuk membuat program. Pemrograman visual berbasis kode menggunakan kode program yang ditulis dalam bahasa pemrograman visual untuk membuat program. Pemrograman visual dapat digunakan dalam berbagai bidang, seperti pendidikan, bisnis, dan hiburan. Pemrograman visual dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen. Pemrograman visual memiliki beberapa contoh, seperti Scratch, Blockly, dan App Inventor. Scratch adalah contoh pemrograman visual berbasis blok, sedangkan Blockly adalah contoh pemrograman visual berbasis ikon. App Inventor adalah contoh pemrograman visual berbasis kode. Pemrograman visual dapat dibuat dengan menggunakan perangkat lunak yang tepat, seperti Scratch, Blockly, dan App Inventor. Pemrograman visual juga dapat dibuat dengan menggunakan bahasa pemrograman visual, seperti Java, Python, dan C++. Pemrograman visual dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen. Pemrograman visual memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik.   ) Pemrograman visual berbasis blok menggunakan elemen-elemen visual seperti blok untuk membuat program. Blok-blok ini dapat disusun untuk membuat program yang lebih kompleks. Pemrograman visual berbasis blok memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual berbasis blok juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik. Pemrograman visual berbasis blok dapat digunakan untuk membuat berbagai jenis program, seperti game, aplikasi mobile, dan aplikasi web. Pemrograman visual berbasis blok dapat dibuat dengan menggunakan perangkat lunak yang tepat, seperti Scratch dan Blockly. Pemrograman visual berbasis blok memiliki beberapa contoh, seperti Scratch dan Blockly. Scratch adalah contoh pemrograman visual berbasis blok yang menggunakan elemen-elemen visual seperti blok untuk membuat program. Blockly adalah contoh pemrograman visual berbasis blok yang menggunakan elemen-elemen visual seperti blok untuk membuat program. Pemrograman visual berbasis blok dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual berbasis blok juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   ) Pemrograman visual berbasis ikon menggunakan elemen-elemen visual seperti ikon untuk membuat program. Ikon-ikon ini dapat disusun untuk membuat program yang lebih kompleks. Pemrograman visual berbasis ikon memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual berbasis ikon juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik. Pemrograman visual berbasis ikon dapat digunakan untuk membuat berbagai jenis program, seperti game, aplikasi mobile, dan aplikasi web. Pemrograman visual berbasis ikon dapat dibuat dengan menggunakan perangkat lunak yang tepat, seperti App Inventor. Pemrograman visual berbasis ikon memiliki beberapa contoh, seperti App Inventor. App Inventor adalah contoh pemrograman visual berbasis ikon yang menggunakan elemen-elemen visual seperti ikon untuk membuat program. Pemrograman visual berbasis ikon dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual berbasis ikon juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   ) Pemrograman visual berbasis kode menggunakan kode program yang ditulis dalam bahasa pemrograman visual untuk membuat program. Kode program ini dapat disusun untuk membuat program yang lebih kompleks. Pemrograman visual berbasis kode memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual berbasis kode juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik. Pemrograman visual berbasis kode dapat digunakan untuk membuat berbagai jenis program, seperti game, aplikasi mobile, dan aplikasi web. Pemrograman visual berbasis kode dapat dibuat dengan menggunakan perangkat lunak yang tepat, seperti Java, Python, dan C++. Pemrograman visual berbasis kode memiliki beberapa contoh, seperti Java, Python, dan C++. Java adalah contoh pemrograman visual berbasis kode yang menggunakan kode program yang ditulis dalam bahasa Java untuk membuat program. Python adalah contoh pemrograman visual berbasis kode yang menggunakan kode program yang ditulis dalam bahasa Python untuk membuat program. C++ adalah contoh pemrograman visual berbasis kode yang menggunakan kode program yang ditulis dalam bahasa C++ untuk membuat program. Pemrograman visual berbasis kode dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual berbasis kode juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   ) Pemrograman visual dapat digunakan dalam berbagai bidang, seperti pendidikan, bisnis, dan hiburan. Pemrograman visual dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen. Pemrograman visual memiliki beberapa contoh, seperti Scratch, Blockly, dan App Inventor. Scratch adalah contoh pemrograman visual yang dapat digunakan dalam pendidikan untuk membuat program yang lebih interaktif dan menarik. Blockly adalah contoh pemrograman visual yang dapat digunakan dalam bisnis untuk membuat program yang lebih kompleks. App Inventor adalah contoh pemrograman visual yang dapat digunakan dalam hiburan untuk membuat program yang lebih interaktif dan menarik. Pemrograman visual dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   ) Pemrograman visual memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik. Pemrograman visual dapat digunakan untuk membuat berbagai jenis program, seperti game, aplikasi mobile, dan aplikasi web. Pemrograman visual dapat dibuat dengan menggunakan perangkat lunak yang tepat, seperti Scratch, Blockly, dan App Inventor. Pemrograman visual memiliki beberapa contoh, seperti Scratch, Blockly, dan App Inventor. Scratch adalah contoh pemrograman visual yang dapat digunakan untuk membuat program yang lebih interaktif dan menarik. Blockly adalah contoh pemrograman visual yang dapat digunakan untuk membuat program yang lebih kompleks. App Inventor adalah contoh pemrograman visual yang dapat digunakan untuk membuat program yang lebih interaktif dan menarik. Pemrograman visual dapat digunakan untuk membuat program yang lebih interaktif dan menarik, serta memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah. Pemrograman visual juga dapat digunakan untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.  </p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Membuat Program Sederhana dengan Pemrograman Visual</h3>
+    <div class="sub-content"><p>Membuat program sederhana dengan pemrograman visual dapat dilakukan dengan menggunakan perangkat lunak yang tepat, seperti Scratch, Blockly, dan App Inventor. Pertama, kita perlu memilih perangkat lunak yang akan digunakan untuk membuat program. Setelah itu, kita perlu membuat desain program yang akan dibuat, termasuk antarmuka pengguna dan algoritma program. Setelah desain program selesai, kita perlu membuat program dengan menggunakan perangkat lunak yang telah dipilih. Membuat program sederhana dengan pemrograman visual dapat dilakukan dengan menggunakan langkah-langkah berikut:   ) Pilih perangkat lunak yang akan digunakan untuk membuat program. Perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual adalah Scratch, Blockly, dan App Inventor.   ) Buat desain program yang akan dibuat, termasuk antarmuka pengguna dan algoritma program. Desain program harus jelas dan sistematis, sehingga program dapat dibuat dengan lebih cepat dan mudah.   ) Buat program dengan menggunakan perangkat lunak yang telah dipilih. Program harus dibuat dengan menggunakan elemen-elemen visual yang telah disediakan oleh perangkat lunak, seperti blok, ikon, dan kode program.   ) Uji program yang telah dibuat untuk memastikan bahwa program berjalan dengan baik. Program harus diuji dengan menggunakan data yang berbeda-beda untuk memastikan bahwa program dapat menangani berbagai situasi.   ) Perbaiki program yang telah dibuat jika diperlukan. Program harus diperbaiki jika terdapat kesalahan atau kekurangan dalam program.   Membuat program sederhana dengan pemrograman visual dapat dilakukan dengan menggunakan contoh-contoh yang telah disediakan oleh perangkat lunak. Contoh-contoh ini dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Contoh membuat program sederhana dengan Scratch. Scratch adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Scratch memiliki elemen-elemen visual seperti blok yang dapat digunakan untuk membuat program.   ) Contoh membuat program sederhana dengan Blockly. Blockly adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Blockly memiliki elemen-elemen visual seperti ikon yang dapat digunakan untuk membuat program.   ) Contoh membuat program sederhana dengan App Inventor. App Inventor adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. App Inventor memiliki elemen-elemen visual seperti kode program yang dapat digunakan untuk membuat program.   Membuat program sederhana dengan pemrograman visual dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Membuat program sederhana dengan pemrograman visual juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Membuat program sederhana dengan pemrograman visual dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Membuat program sederhana dengan pemrograman visual dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Membuat program sederhana dengan pemrograman visual dapat membantu kita untuk membuat program yang lebih interaktif dan menarik.   ) Membuat program sederhana dengan pemrograman visual dapat membantu kita untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   Membuat program sederhana dengan pemrograman visual dapat dilakukan dengan menggunakan perangkat lunak yang tepat, seperti Scratch, Blockly, dan App Inventor. Membuat program sederhana dengan pemrograman visual juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.  </p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Menganalisis Kelebihan dan Kekurangan Pemrograman Visual</h3>
+    <div class="sub-content"><p>Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Pemrograman visual memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik. Namun, pemrograman visual juga memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik.   ) Kelebihan pemrograman visual. Pemrograman visual memiliki beberapa kelebihan, seperti memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, serta memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik.   ) Kekurangan pemrograman visual. Pemrograman visual memiliki beberapa kekurangan, seperti memerlukan perangkat lunak yang tepat untuk membuat program, serta memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik.   Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Menganalisis kelebihan dan kekurangan pemrograman visual juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk membuat program yang lebih interaktif dan menarik.   ) Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   Menganalisis kelebihan dan kekurangan pemrograman visual dapat dilakukan dengan menggunakan contoh-contoh yang telah disediakan oleh perangkat lunak. Contoh-contoh ini dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Contoh menganalisis kelebihan dan kekurangan pemrograman visual dengan Scratch. Scratch adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Scratch memiliki elemen-elemen visual seperti blok yang dapat digunakan untuk membuat program.   ) Contoh menganalisis kelebihan dan kekurangan pemrograman visual dengan Blockly. Blockly adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Blockly memiliki elemen-elemen visual seperti ikon yang dapat digunakan untuk membuat program.   ) Contoh menganalisis kelebihan dan kekurangan pemrograman visual dengan App Inventor. App Inventor adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. App Inventor memiliki elemen-elemen visual seperti kode program yang dapat digunakan untuk membuat program.   Menganalisis kelebihan dan kekurangan pemrograman visual dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Menganalisis kelebihan dan kekurangan pemrograman visual juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.  </p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Membuat Dokumen yang Rapi dan Sistematis tentang Program yang Dibuat</h3>
+    <div class="sub-content"><p>Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Membuat dokumen yang rapi dan sistematis tentang program yang dibuat juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat membantu kita untuk membuat program yang lebih interaktif dan menarik.   ) Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat membantu kita untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat dilakukan dengan menggunakan contoh-contoh yang telah disediakan oleh perangkat lunak. Contoh-contoh ini dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Contoh membuat dokumen yang rapi dan sistematis tentang program yang dibuat dengan Scratch. Scratch adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Scratch memiliki elemen-elemen visual seperti blok yang dapat digunakan untuk membuat program.   ) Contoh membuat dokumen yang rapi dan sistematis tentang program yang dibuat dengan Blockly. Blockly adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Blockly memiliki elemen-elemen visual seperti ikon yang dapat digunakan untuk membuat program.   ) Contoh membuat dokumen yang rapi dan sistematis tentang program yang dibuat dengan App Inventor. App Inventor adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. App Inventor memiliki elemen-elemen visual seperti kode program yang dapat digunakan untuk membuat program.   Membuat dokumen yang rapi dan sistematis tentang program yang dibuat dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Membuat dokumen yang rapi dan sistematis tentang program yang dibuat juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.  </p></div>
+  </div>
+
+  <div class="sub-card">
+    <h3>Menggunakan Pemrograman Visual dalam Berbagai Bidang</h3>
+    <div class="sub-content"><p>Menggunakan pemrograman visual dalam berbagai bidang dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Menggunakan pemrograman visual dalam berbagai bidang juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.   ) Menggunakan pemrograman visual dalam pendidikan. Pemrograman visual dapat digunakan dalam pendidikan untuk membuat program yang lebih interaktif dan menarik.   ) Menggunakan pemrograman visual dalam bisnis. Pemrograman visual dapat digunakan dalam bisnis untuk membuat program yang lebih kompleks, seperti sistem informasi dan sistem manajemen.   ) Menggunakan pemrograman visual dalam hiburan. Pemrograman visual dapat digunakan dalam hiburan untuk membuat program yang lebih interaktif dan menarik.   Menggunakan pemrograman visual dalam berbagai bidang dapat dilakukan dengan menggunakan contoh-contoh yang telah disediakan oleh perangkat lunak. Contoh-contoh ini dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual.   ) Contoh menggunakan pemrograman visual dalam pendidikan dengan Scratch. Scratch adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Scratch memiliki elemen-elemen visual seperti blok yang dapat digunakan untuk membuat program.   ) Contoh menggunakan pemrograman visual dalam bisnis dengan Blockly. Blockly adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. Blockly memiliki elemen-elemen visual seperti ikon yang dapat digunakan untuk membuat program.   ) Contoh menggunakan pemrograman visual dalam hiburan dengan App Inventor. App Inventor adalah perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual. App Inventor memiliki elemen-elemen visual seperti kode program yang dapat digunakan untuk membuat program.   Menggunakan pemrograman visual dalam berbagai bidang dapat membantu kita untuk memahami cara membuat program dengan menggunakan pemrograman visual. Menggunakan pemrograman visual dalam berbagai bidang juga dapat membantu kita untuk mengembangkan kemampuan pemrograman kita.  </p></div>
+  </div>
+
+  </section>
+  <section id="animasi" class="glass-card cyan-border">
+    <div class="section-label cyan-label">Visual</div>
+    <div class="section-title cyan-title">Animasi Interaktif</div>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.83rem;margin-bottom:1rem;text-align:center;">Pemrograman visual adalah teknik pemrograman yang menggunakan elemen-elemen visual seperti gambar, ikon, dan bentuk untuk membuat program. Pemrograman visual memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah, karena tidak perlu menulis kode program yang panjang dan kompleks. Pemrograman visual juga memungkinkan programmer untuk membuat program yang lebih interaktif dan menarik, karena dapat menggunakan elemen-elemen visual untuk membuat antarmuka pengguna yang lebih baik.</p>
+    <canvas id="c" height="200"></canvas>
+  </section>
+  <section id="quiz" class="glass-card cyan-border">
+    <div class="section-label cyan-label">Evaluasi</div>
+    <div class="section-title cyan-title">Quiz Interaktif</div>
+    <div class="timer">⏱ <span id="td">10:00</span></div>
+    <div class="quiz-nav" id="qnav"></div>
+    <div id="qbox"></div>
+    <div id="result-box" style="display:none" class="result-box">
+      <div class="result-score" id="rscore"></div>
+      <div class="result-grade" id="rgrade"></div>
+    </div>
+  </section>
+  <section id="glosarium" class="glass-card purple-border">
+    <div class="section-label purple-label">Referensi</div>
+    <div class="section-title purple-title">Glosarium</div>
+    
+  <div class="glos-item">
+    <div class="glos-term">Pemrograman Visual</div>
+    <div class="glos-def">Teknik pemrograman yang menggunakan elemen-elemen visual seperti gambar, ikon, dan bentuk untuk membuat program</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Scratch</div>
+    <div class="glos-def">Perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Blockly</div>
+    <div class="glos-def">Perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">App Inventor</div>
+    <div class="glos-def">Perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Kode Program</div>
+    <div class="glos-def">Bahasa pemrograman yang digunakan untuk membuat program</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Antarmuka Pengguna</div>
+    <div class="glos-def">Bagian dari program yang berinteraksi dengan pengguna</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Bahasa Pemrograman</div>
+    <div class="glos-def">Bahasa yang digunakan untuk membuat program</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Perangkat Lunak</div>
+    <div class="glos-def">Program yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Pendekatan Berorientasi Objek</div>
+    <div class="glos-def">Pendekatan yang digunakan dalam pemrograman visual untuk membuat program yang lebih kompleks</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Elemen-elemen Visual</div>
+    <div class="glos-def">Gambar, ikon, dan bentuk yang digunakan dalam pemrograman visual untuk membuat program</div>
+  </div>
+
+  <div class="glos-item">
+    <div class="glos-term">Desain Antarmuka Pengguna</div>
+    <div class="glos-def">Proses membuat antarmuka pengguna yang baik dan efektif</div>
+  </div>
+
+  </section>
+</div>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+let sidebarOpen=true;
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const mn=document.getElementById('main');
+  const ov=document.getElementById('overlay');
+  sidebarOpen=!sidebarOpen;
+  if(sidebarOpen){sb.classList.remove('hidden');mn.classList.remove('full');ov.classList.remove('show');}
+  else{sb.classList.add('hidden');mn.classList.add('full');ov.classList.add('show');}
+}
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  document.getElementById('progress-bar').style.width=p+'%';
+  document.querySelectorAll('.sidebar a').forEach(a=>{
+    const s=document.querySelector(a.getAttribute('href'));
+    if(s){const r=s.getBoundingClientRect();if(r.top<=120&&r.bottom>=120){a.classList.add('active');}else{a.classList.remove('active');}}
+  });
+});
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+canvas.width=canvas.offsetWidth||800;canvas.height=200;
+const ptypes=[{l:'CO₂',c:'#a855f7'},{l:'H₂O',c:'#06b6d4'},{l:'O₂',c:'#22c55e'},{l:'ATP',c:'#f59e0b'}];
+const pts=[];
+for(let i=0;i<30;i++){const t=ptypes[Math.floor(Math.random()*4)];pts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:5+Math.random()*6,vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5,c:t.c,l:t.l});}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<p.r||p.x>canvas.width-p.r)p.vx*=-1;if(p.y<p.r||p.y>canvas.height-p.r)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+'33';ctx.fill();ctx.strokeStyle=p.c;ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#fff';ctx.font='8px sans-serif';ctx.textAlign='center';ctx.fillText(p.l,p.x,p.y+3);});requestAnimationFrame(draw);}
+draw();
+const qs=[{"soal":"Apa yang dimaksud dengan pemrograman visual?","opsi":["Teknik pemrograman yang menggunakan kode program","Teknik pemrograman yang menggunakan elemen-elemen visual","Teknik pemrograman yang menggunakan perangkat lunak","Teknik pemrograman yang menggunakan bahasa pemrograman"],"jawaban":1,"feedback":["Pemrograman visual adalah teknik pemrograman yang menggunakan kode program","Pemrograman visual adalah teknik pemrograman yang menggunakan elemen-elemen visual seperti gambar, ikon, dan bentuk untuk membuat program","Pemrograman visual adalah teknik pemrograman yang menggunakan perangkat lunak","Pemrograman visual adalah teknik pemrograman yang menggunakan bahasa pemrograman"]},{"soal":"Apa kelebihan pemrograman visual?","opsi":["Memungkinkan programmer untuk membuat program dengan lebih lama dan sulit","Memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah","Memungkinkan programmer untuk membuat program yang lebih kompleks","Memungkinkan programmer untuk membuat program yang lebih sederhana"],"jawaban":1,"feedback":["Pemrograman visual tidak memungkinkan programmer untuk membuat program dengan lebih lama dan sulit","Pemrograman visual memungkinkan programmer untuk membuat program dengan lebih cepat dan mudah","Pemrograman visual tidak memungkinkan programmer untuk membuat program yang lebih kompleks","Pemrograman visual tidak memungkinkan programmer untuk membuat program yang lebih sederhana"]},{"soal":"Apa kekurangan pemrograman visual?","opsi":["Memerlukan perangkat lunak yang tepat untuk membuat program","Memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik","Memerlukan kode program yang panjang dan kompleks","Memerlukan bahasa pemrograman yang sulit"],"jawaban":0,"feedback":["Pemrograman visual memerlukan perangkat lunak yang tepat untuk membuat program","Pemrograman visual memerlukan kemampuan desain yang baik untuk membuat antarmuka pengguna yang baik","Pemrograman visual tidak memerlukan kode program yang panjang dan kompleks","Pemrograman visual tidak memerlukan bahasa pemrograman yang sulit"]},{"soal":"Apa contoh perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual?","opsi":["Scratch","Blockly","App Inventor","Java"],"jawaban":0,"feedback":["Scratch adalah contoh perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual","Blockly adalah contoh perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual","App Inventor adalah contoh perangkat lunak yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual","Java adalah contoh bahasa pemrograman yang dapat digunakan untuk membuat program sederhana dengan pemrograman visual"]},{"soal":"Apa kelebihan menggunakan pemrograman visual dalam pendidikan?","opsi":["Memungkinkan siswa untuk membuat program dengan lebih lama dan sulit","Memungkinkan siswa untuk membuat program dengan lebih cepat dan mudah","Memungkinkan siswa untuk membuat program yang lebih kompleks","Memungkinkan siswa untuk membuat program yang lebih sederhana"],"jawaban":1,"feedback":["Pemrograman visual tidak memungkinkan siswa untuk membuat program dengan lebih lama dan sulit","Pemrograman visual memungkinkan siswa untuk membuat program dengan lebih cepat dan mudah","Pemrograman visual tidak memungkinkan siswa untuk membuat program yang lebih kompleks","Pemrograman visual tidak memungkinkan siswa untuk membuat program yang lebih sederhana"]}];
+let cur=0,score=0,done=[];
+const qnav=document.getElementById('qnav');
+const qbox=document.getElementById('qbox');
+function renderNav(){qnav.innerHTML='';qs.forEach((_,i)=>{const d=document.createElement('div');d.className='q-dot'+(done.includes(i)?' done':i===cur?' current':'');d.textContent=i+1;qnav.appendChild(d);});}
+function renderQ(){
+  if(done.length===qs.length){qbox.style.display='none';const rb=document.getElementById('result-box');rb.style.display='block';const pct=score/qs.length;const grade=pct>=0.9?'A':pct>=0.8?'B':pct>=0.6?'C':'D';document.getElementById('rscore').textContent=score+'/'+qs.length;document.getElementById('rgrade').textContent='Nilai: '+grade+' — '+(pct>=0.8?'Luar biasa! 🎉':pct>=0.6?'Bagus, terus belajar! 👍':'Pelajari lagi materinya ya! 📖');return;}
+  while(done.includes(cur))cur=(cur+1)%qs.length;
+  renderNav();
+  const q=qs[cur];
+  qbox.innerHTML='<div class="quiz-q">'+q.soal+'</div>'+q.opsi.map((o,i)=>'<div class="opt" onclick="pick(this,'+i+')">'+String.fromCharCode(65+i)+'. '+o+'</div>').join('')+'<div class="feedback" id="fb"></div>';
+}
+window.pick=function(el,i){const q=qs[cur];qbox.querySelectorAll('.opt').forEach(o=>o.classList.add('disabled'));const fb=document.getElementById('fb');if(i===q.jawaban){el.classList.add('correct');fb.className='feedback ok';score++;}else{el.classList.add('wrong');qbox.querySelectorAll('.opt')[q.jawaban].classList.add('correct');fb.className='feedback no';}fb.textContent=q.feedback[i];fb.style.display='block';done.push(cur);setTimeout(()=>{cur=(cur+1)%qs.length;renderQ();renderNav();},1800);};
+renderNav();renderQ();
+let t=600;const td=document.getElementById('td');const ti=setInterval(()=>{t--;const m=Math.floor(t/60),s=t%60;td.textContent=m+':'+(s<10?'0':'')+s;if(t<=0)clearInterval(ti);},1000);
+</script>
+</body>
+</html>
