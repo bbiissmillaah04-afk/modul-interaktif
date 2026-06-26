@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proses Fotosintesis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Arial Black',Arial,sans-serif;background:#f5f0e8;height:100vh;overflow:hidden;}
+.presentation{width:100%;height:100vh;position:relative;}
+.slide{display:none;width:100%;height:100vh;padding:2rem 3.5rem;flex-direction:column;justify-content:center;position:absolute;top:0;left:0;border:5px solid #1a1a1a;transition:none;overflow-y:auto;}
+.slide.active{display:flex;animation:slideIn 0.35s cubic-bezier(.22,.61,.36,1) forwards;}
+.slide.exit{animation:slideOut 0.3s ease-in forwards;}
+@keyframes slideIn{from{transform:translateX(60px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes slideOut{from{transform:translateX(0);opacity:1;}to{transform:translateX(-60px);opacity:0;}}
+.slide-inner{max-width:900px;width:100%;}
+.slide-number{position:absolute;top:1rem;right:1.5rem;font-size:0.8rem;font-weight:900;color:#1a1a1a;background:#fff;border:3px solid #1a1a1a;padding:0.2rem 0.7rem;box-shadow:3px 3px 0 #1a1a1a;letter-spacing:1px;}
+.slide h2{font-size:2.2rem;font-weight:900;margin-bottom:0.8rem;text-transform:uppercase;letter-spacing:-1px;border-bottom:5px solid #1a1a1a;padding-bottom:0.6rem;line-height:1.1;color:#1a1a1a;}
+.penjelasan{font-size:0.95rem;font-weight:700;color:#1a1a1a;margin-bottom:1rem;line-height:1.6;background:rgba(255,255,255,0.5);border-left:5px solid #1a1a1a;padding:0.6rem 1rem;}
+.slide ul{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:0.8rem;}
+.slide ul li{font-size:0.92rem;font-weight:700;padding:0.6rem 1rem;background:#fff;border:3px solid #1a1a1a;box-shadow:4px 4px 0 #1a1a1a;line-height:1.5;color:#1a1a1a;animation:popIn 0.3s ease forwards;opacity:0;}
+.slide.active li:nth-child(1){animation-delay:0.1s;}
+.slide.active li:nth-child(2){animation-delay:0.2s;}
+.slide.active li:nth-child(3){animation-delay:0.3s;}
+.slide.active li:nth-child(4){animation-delay:0.4s;}
+@keyframes popIn{from{transform:translateY(10px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.slide ul li::before{content:"▶ ";color:#1a1a1a;}
+.catatan{padding:0.6rem 1rem;background:#fff;border:3px solid #1a1a1a;box-shadow:4px 4px 0 #1a1a1a;font-size:0.85rem;font-weight:700;color:#1a1a1a;animation:popIn 0.3s 0.5s ease forwards;opacity:0;}
+.slide.active .catatan{opacity:0;}
+.nav{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:0;align-items:center;border:3px solid #1a1a1a;box-shadow:5px 5px 0 #1a1a1a;background:#fff;z-index:100;}
+.nav button{background:#fff;border:none;border-right:3px solid #1a1a1a;color:#1a1a1a;padding:0.6rem 1.5rem;cursor:pointer;font-size:0.88rem;font-weight:900;text-transform:uppercase;transition:all 0.1s;}
+.nav button:last-child{border-right:none;border-left:3px solid #1a1a1a;}
+.nav button:hover{background:#1a1a1a;color:#fff;}
+.nav span{color:#1a1a1a;font-size:0.85rem;font-weight:900;min-width:70px;text-align:center;padding:0 0.5rem;}
+.header-info{position:fixed;top:1rem;left:1.5rem;z-index:100;}
+.header-info h1{font-size:0.85rem;font-weight:900;color:#1a1a1a;text-transform:uppercase;background:#fff;border:3px solid #1a1a1a;padding:0.2rem 0.7rem;box-shadow:3px 3px 0 #1a1a1a;}
+.progress{position:fixed;top:0;left:0;height:6px;background:#1a1a1a;transition:width 0.3s;z-index:200;}
+.fullscreen-btn{position:fixed;top:1rem;right:1.5rem;background:#fff;border:3px solid #1a1a1a;color:#1a1a1a;padding:0.4rem 0.8rem;box-shadow:3px 3px 0 #1a1a1a;cursor:pointer;font-size:0.8rem;font-weight:900;text-transform:uppercase;z-index:100;}
+.fullscreen-btn:hover{background:#1a1a1a;color:#fff;}
+</style>
+</head>
+<body>
+<div id="progress" class="progress"></div>
+<div class="header-info"><h1>Proses Fotosintesis</h1></div>
+<button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ FULLSCREEN</button>
+<div class="presentation">
+  <div class="slide" id="slide-0" style="background:#ffeb3b">
+    <div class="slide-number">1 / 6</div>
+    <div class="slide-inner">
+      <h2>Pendahuluan</h2>
+      <p class="penjelasan">Fotosintesis adalah proses yang sangat penting bagi kehidupan di Bumi</p>
+      <ul>
+        <li>Fotosintesis adalah proses biokimia yang kompleks</li><li>Fotosintesis terjadi pada tumbuhan dan beberapa jenis bakteri</li><li>Fotosintesis memerlukan energi cahaya matahari</li><li>Fotosintesis menghasilkan glukosa dan oksigen</li>
+      </ul>
+      <div class="catatan">💡 Fotosintesis terjadi pada kloroplas tumbuhan</div>
+    </div>
+  </div>
+
+  <div class="slide" id="slide-1" style="background:#ff6b6b">
+    <div class="slide-number">2 / 6</div>
+    <div class="slide-inner">
+      <h2>Bahan Baku Fotosintesis</h2>
+      <p class="penjelasan">Bahan baku fotosintesis harus tersedia dalam jumlah yang cukup</p>
+      <ul>
+        <li>Karbondioksida dari atmosfer</li><li>Air dari tanah</li><li>Energi cahaya matahari</li><li>Nutrisi penting seperti nitrogen dan fosfor</li>
+      </ul>
+      <div class="catatan">💡 Ketersediaan bahan baku sangat mempengaruhi laju fotosintesis</div>
+    </div>
+  </div>
+
+  <div class="slide" id="slide-2" style="background:#4ecdc4">
+    <div class="slide-number">3 / 6</div>
+    <div class="slide-inner">
+      <h2>Proses Fotosintesis</h2>
+      <p class="penjelasan">Proses fotosintesis melibatkan beberapa tahap yang berbeda</p>
+      <ul>
+        <li>Penyerapan energi cahaya matahari oleh klorofil</li><li>Konversi energi cahaya menjadi energi kimia</li><li>Penggunaan energi kimia untuk menghasilkan glukosa dan oksigen</li><li>Reaksi kimia yang kompleks dan terkontrol</li>
+      </ul>
+      <div class="catatan">💡 Fotosintesis adalah contoh proses biokimia yang sangat efisien</div>
+    </div>
+  </div>
+
+  <div class="slide" id="slide-3" style="background:#a8e6cf">
+    <div class="slide-number">4 / 6</div>
+    <div class="slide-inner">
+      <h2>Peran Kloroplas</h2>
+      <p class="penjelasan">Kloroplas adalah organel yang sangat penting bagi tumbuhan</p>
+      <ul>
+        <li>Kloroplas adalah organel tempat fotosintesis terjadi</li><li>Kloroplas mengandung klorofil dan pigmen lainnya</li><li>Kloroplas memiliki struktur yang unik dan kompleks</li><li>Kloroplas berperan penting dalam menghasilkan energi untuk tumbuhan</li>
+      </ul>
+      <div class="catatan">💡 Kloroplas memiliki kemampuan untuk menghasilkan energi melalui fotosintesis</div>
+    </div>
+  </div>
+
+  <div class="slide" id="slide-4" style="background:#ffd93d">
+    <div class="slide-number">5 / 6</div>
+    <div class="slide-inner">
+      <h2>Manfaat Fotosintesis</h2>
+      <p class="penjelasan">Fotosintesis memiliki banyak manfaat bagi kehidupan di Bumi</p>
+      <ul>
+        <li>Menghasilkan oksigen yang penting bagi kehidupan</li><li>Menghasilkan glukosa yang digunakan sebagai sumber energi</li><li>Mengurangi kadar karbondioksida di atmosfer</li><li>Mendukung pertumbuhan dan perkembangan tumbuhan</li>
+      </ul>
+      <div class="catatan">💡 Fotosintesis adalah proses yang sangat penting bagi lingkungan</div>
+    </div>
+  </div>
+
+  <div class="slide" id="slide-5" style="background:#c9b1ff">
+    <div class="slide-number">6 / 6</div>
+    <div class="slide-inner">
+      <h2>Kesimpulan</h2>
+      <p class="penjelasan">Fotosintesis adalah proses yang sangat penting bagi kehidupan</p>
+      <ul>
+        <li>Fotosintesis adalah proses biokimia yang kompleks</li><li>Fotosintesis terjadi pada tumbuhan dan beberapa jenis bakteri</li><li>Fotosintesis menghasilkan glukosa dan oksigen</li><li>Fotosintesis sangat penting bagi kehidupan di Bumi</li>
+      </ul>
+      <div class="catatan">💡 Fotosintesis harus dipahami dan dihargai sebagai proses yang sangat berharga</div>
+    </div>
+  </div>
+</div>
+<div class="nav">
+  <button onclick="prevSlide()">← PREV</button>
+  <span id="nav-info">1 / 6</span>
+  <button onclick="nextSlide()">NEXT →</button>
+</div>
+<script>
+let cur=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+function showSlide(n,dir){
+  slides[cur].classList.remove('active');
+  cur=n;
+  slides[cur].classList.add('active');
+  document.getElementById('nav-info').textContent=(cur+1)+' / '+total;
+  document.getElementById('progress').style.width=((cur+1)/total*100)+'%';
+}
+function nextSlide(){if(cur<total-1)showSlide(cur+1,'next');}
+function prevSlide(){if(cur>0)showSlide(cur-1,'prev');}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')nextSlide();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevSlide();
+});
+function toggleFullscreen(){
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+showSlide(0);
+</script>
+</body>
+</html>
